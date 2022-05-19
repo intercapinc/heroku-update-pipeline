@@ -1,0 +1,41 @@
+name: 'heroku-update-pipeline'
+
+inputs:
+    app:
+        required: true
+        description: |
+            Heroku app.
+            Ex: 'app'.
+
+    stage:
+        required: true
+        description: |
+            Heroku Pipeline stage.
+            Ex: 'development'.
+
+    pipeline:
+        required: true
+        description: |
+            Heroku Pipeline ID.
+            Ex: 'asdf1234'.
+
+    token:
+        required: true
+        description: |
+            Heroku API Key.
+            Ex: 'asdf1234'.
+
+runs:
+    using: 'composite'
+
+    steps:
+        - name: 'Update pipeline'
+          uses: 'intercapinc/heroku-client@48a0127c4f9227b043d3af78fdaa997be701382e'
+          with:
+              endpoint: 'pipeline-couplings'
+              token: '${{ inputs.token }}'
+              expected: 201 422
+              data: >-
+                  app='${{ inputs.app }}'
+                  stage='${{ inputs.stage }}'
+                  pipeline='${{ inputs.pipeline }}'
